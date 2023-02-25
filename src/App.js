@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 
 import MoviesList from "./components/MoviesList";
 import "./App.css";
+import AddMovie from "./components/AddMovie";
 
 
 function App() {
@@ -51,6 +52,10 @@ function App() {
 console.log('running')
    clearInterval();
   }
+
+  const AddMoviefunction=(movie)=>{
+    console.log(movie);
+  }
   let content=<h4>No Movies Found Try Fetching some Movies</h4>
   
   if(Iserror)
@@ -83,6 +88,9 @@ console.log('running')
 
   return (
     <React.Fragment>
+      <section>
+       <AddMovie addmovie={AddMoviefunction}/>
+      </section>
       <section>
         <button onClick={FetchMovie}>Fetch Movies</button>
       
