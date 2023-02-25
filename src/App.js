@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import MoviesList from "./components/MoviesList";
 import "./App.css";
@@ -9,12 +9,14 @@ function App() {
  const [Isloading, setIsloading] = useState(false);
  const [Iserror, setIserror] = useState(null);
 
-  async function FetchMovie() {
+
+  const FetchMovie=useCallback(async ()=>{
   
     
     setIserror(null);
     setIsloading(true);
     try {
+      
       const response = await fetch("https://swapi.dev/api/films");
       if(!response.ok){
       throw new Error("SomeThing Went Wrong!!! ...Retrying");
@@ -38,26 +40,30 @@ function App() {
     }
     setIsloading(false);
    
-  }
+  },[]);
+  useEffect(()=>{
+    FetchMovie();
+   },[FetchMovie]);
 
-  function print(){
+
+  function stop(){
   
-
-   console.log('running')
+console.log('running')
+   clearInterval();
   }
   let content=<h4>No Movies Found Try Fetching some Movies</h4>
   
   if(Iserror)
   {
-    function retry()
-    {setInterval(FetchMovie, 5000)
+    
+    setInterval(FetchMovie, 5000)
 
-    }
-         retry();
+    
+    
     
   
       content=<><p>{Iserror} </p>
-     <button onClick={print}>Stop Retrying</button>
+     <button onClick={stop}>Stop Retrying</button>
       </>
    
       
@@ -71,6 +77,9 @@ function App() {
   {
     content=<MoviesList movies={Movies} />
   }
+      
+
+  
 
   return (
     <React.Fragment>
