@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState,useRef } from "react";
 import axios from "axios";
 
 import MoviesList from "./components/MoviesList";
@@ -16,7 +16,7 @@ function App() {
      // <----------------------------------------FetchMovie start-------------------------------->
     try {
       const response = await fetch(
-        "https://react-http-6410a-default-rtdb.firebaseio.com/movie.jso"
+        "https://react-http-6410a-default-rtdb.firebaseio.com/movie.json"
       );
       if (!response.ok) {
         throw new Error("SomeThing Went Wrong!!! ...Retrying");
@@ -46,7 +46,7 @@ function App() {
 
   useEffect(() => {
     FetchMovie();
-  }, [FetchMovie]);
+  },[FetchMovie]);
 
   
   // <----------------------------------------Add Movie Function startTransition-------------------------------->
@@ -72,12 +72,16 @@ function App() {
     axios.delete(
       `https://react-http-6410a-default-rtdb.firebaseio.com/movie/${id}.json`
       );
+     
+        FetchMovie();
+      
+
       console.log("delete done", id);
     };
 
    // <----------------------------------------Delete Movie Function End-------------------------------->
 
-   let intervalId;
+   let intervalId=useRef();
    
    // <----------------------------------------Retry function-------------------------------->
    useEffect(() => {
@@ -94,6 +98,7 @@ function App() {
       console.log("running");
       clearInterval(intervalId);
       setIserror(false);
+      
     }
      // <----------------------------------------Content Changes-------------------------------->
 
@@ -118,7 +123,7 @@ function App() {
 
 
 
-  
+
 
   return (
     <React.Fragment>
